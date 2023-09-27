@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <time.h>
 int size=720*560;
-int red[size],green[size],blue[size],trans[size];
-int r[size/2],g[size/2],b[size/2],t[size/2];
-int defred[size],defgreen[size],defblue[size],deftrans[size];
-int defr[size/2],defg[size/2],defb[size/2],deft[size/2];
-typedef struct Image
+int red[720*560],green[720*560],blue[720*560],trans[720*560];
+int r[720*560/2],g[720*560/2],b[720*560/2],t[720*560/2];
+int defred[720*560],defgreen[720*560],defblue[720*560],deftrans[720*560];
+int defr[720*560/2],defg[720*560/2],defb[720*560/2],deft[720*560/2];
+struct Image
 {
    int red;
    int blue;
    int green;
    int trans;
-}a[720][560];
+};
+struct Image a[720][560];
 struct Image defa[720][560];
 void defaultpixels();
 void read();
@@ -43,7 +47,7 @@ void main()
         int y=100,z=120;
         /*the value of count if found within the input range y&z for the given scenario
         can be considered to be a human*/
-        if((countr>y&&countr<z)||(countg>y&&countg<z)||(countb&&countb<z)||(countt>y&&countt))
+        if((countr>y&&countr<z)||(countg>y&&countg<z)||(countb>y&&countb<z)||(countt>y&&countt<z))
         {
             printf("Human Detected\n");
             int c=0;
@@ -112,13 +116,14 @@ void main()
 }
 void read()
 {
+    srand(time(NULL));
     for(int i=0;i<720;i++)
        for(int j=0;j<560;j++)
        {
-           a[i][j].red = Math.rand(0,255);
-           a[i][j].blue = Math.rand(0,255);
-           a[i][j].green = Math.rand(0,255);
-           a[i][j].trans = Math.rand(0,255);
+           a[i][j].red = rand() % 256;
+           a[i][j].blue = rand() % 256;
+           a[i][j].green = rand() % 256;
+           a[i][j].trans = rand() % 256;
        }
 }
 void convert()
@@ -148,15 +153,17 @@ void compare()
 default input to compare with the currently obtained image of the given time interval.
 In this required case,we take random values generated as our input containing the details
 of the target human required to be locked,*/
+#include <math.h>
 void defaultpixels()
 {
+    srand(time(NULL));
     for(int i=0;i<720;i++)
        for(int j=0;j<560;j++)
        {
-           defa[i][j].red = Math.rand(-255,255);
-           defa[i][j].blue = Math.rand(-255,255);
-           defa[i][j].green = Math.rand(-255,255);
-           defa[i][j].trans = Math.rand(-255,255);
+           defa[i][j].red = rand() % 511 - 255;
+           defa[i][j].blue = rand() % 511 - 255;
+           defa[i][j].green = rand() % 511 - 255;
+           defa[i][j].trans = rand() % 511 - 255;
        }
     int k=0;
     for(int i=0;i<720;i++)
