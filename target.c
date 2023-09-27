@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <time.h>
 int size=720*560;
 int red[720*560],green[720*560],blue[720*560],trans[720*560];
@@ -94,7 +93,7 @@ void main()
                     if(ct<=4*(size/2) && ct>=2*(size/2))
                     {
                         printf("Target is moving\n");
-                        Beep(1000,1000);
+                        printf("\a");
                     }
                     else
                         printf("Target is not moing\n");
@@ -183,3 +182,71 @@ void defaultpixels()
         deft[j] = deftrans[i+1]-deftrans[i];
     }
 }
+
+
+/*
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>//used for interacting with the Operating system
+#include <fcntl.h>
+#include <termios.h>
+
+// configuring the function for communicating with the serial port
+
+int configure_serial_port(const char *port) {
+    int fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
+    if (fd == -1) {
+        perror("Unable to open serial port");
+        return -1;
+    }
+
+    struct termios options;
+    tcgetattr(fd, &options);
+    cfsetispeed(&options, B19600);  // Setting the baud rate to a higher value to run more frames per second
+    cfsetospeed(&options, B19600);
+
+    options.c_cflag |= (CLOCAL | CREAD);
+    options.c_cflag &= ~PARENB;
+    options.c_cflag &= ~CSTOPB;
+    options.c_cflag &= ~CSIZE;
+    options.c_cflag |= CS8;
+
+    tcsetattr(fd, TCSANOW, &options);
+
+    return fd;
+}
+
+// Function to send a command to the UHF radar module and read the response
+
+void send_command(int fd, const char *command, char *response, int response_size) {
+    write(fd, command, strlen(command));
+    
+    usleep(100);  // reducing the delay more for the data to be read to input more frames in a second
+    read(fd, response, response_size);
+}
+
+int main() {
+    const char *serial_port = "/dev/ttyUSB0";  // Replace with the appropriate serial port
+    int fd = configure_serial_port(serial_port);
+
+    if (fd == -1) {
+        return 1;
+    }
+
+    char response[1024];
+    
+    // Example commands
+    send_command(fd, "INITIATE_RADAR\n", response, sizeof(response));
+    printf("Response: %s\n", response);
+
+    send_command(fd, "GET_RADAR_DATA\n", response, sizeof(response));
+    printf("Radar Data: %s\n", response);
+
+    close(fd);
+
+// adding  additional function to return the value of input instead of randomly generated values required for the program to run.
+// finally returning the output obtained by the API and linking it with the above code to obtain close to produce 
+    return 0;
+}
+*/
